@@ -1,0 +1,151 @@
+Methods & Exception Handling:
+
+Declaring methods - method siganture & body
+ - Signature has access modifier, method return type, method name, list of parameters
+    - Access Modifier - controls from where it can be called
+        - private - access only from within containing class or struct
+        - public - least restrictive, access from any code in app
+        - protected - access from within the containing class or from within derived classes
+        - static - method is static member of the class rather than a member of an instance or specific object
+    - Method Return Type - shows what type of method will return. use void if not value or supported data type will return.
+    - Method Name - unique method name
+    - Parameter List - list of arguments separated by commas
+
+        public Boolean StartService(string serviceName)
+        {
+            // code to start the service
+        }
+
+///////////////////////////////////////////////////////////////      
+Calling a Method - Specify method name and provide any arguments in parenthesis
+
+        int upTime = 2000;
+        bool shutdownAutomatically = true;
+        StartService(upTime, shutdownAutomatically);
+
+        // StartService method
+        void StartService(int upTime, bool shutdownAutomatically)
+        {
+            // perform processing here
+        }
+//////////////////////////////////////////////////////////////////
+Returning Data from Methods - specify how to handle value by assigning to variable of same type in calling code
+    - Return Single Value - String value assigned to serviceNameVariable after the call to the method
+
+        string serviceName = GetServiceName(); string GetServiceName(){return "FourthCoffee.SalesService";}
+
+    - Return Multiple Values - 
+        - Return an array or collection
+        - Use the ref keyword - requires variables be initialized first and returns multiple values
+
+            sValue = "";
+            int first = 0;
+            ReturnMultiRef(ref first, ref sValue);
+            Console.WriteLine($"{first.ToString()}, {sValue}");
+
+            void ReturnMultiRef(ref int i, ref string s)
+            {
+                i = 50;
+                s = "usung ref";
+            }
+
+        - Use the out keyword - indicates values will be returned for the parameters
+
+            ReturnMultiOut(out first, out sValue);
+            Console.WriteLine($"{first.ToString}, {sValue}");
+
+            static void ReturnMultiOut(out int i, out string s)
+            {
+                i = 25;
+                s = "using out";
+            }
+
+/////////////////////////////////////////////////////////////////
+Method Overloading - Using the same method with same name but different sigantures to accept different parameters with the same functionality
+
+    void StopService()
+    {
+        // this method accepts no arguments
+    }
+
+    void StopService(string serviceName)
+    {
+        // this method overload accepts a single string arg
+    }
+
+    void StopService(int serviceId)
+    {
+        // this overload accepts a single integer arg
+    }
+
+Component Object Model - uses methods which take optional parameters
+
+Optional Parameters - specify all non optional parameters first
+
+    void StopService(bool forceStop, string serviceName = null, int serviceId = 1)
+    {
+        // code here that will stop the service
+    }
+
+Named Parameters - you can specify parameters by name and therefore in a different order from that defined in the method signature. 
+
+///////////////////////////////////////////////////////////////////
+Exception Handling - indication of an error or exceptional condition
+    - Propagation - calling code should detect and handle exceptions in method called - if not it is propagated to code that invoked calling code, if nothing handles it then a message is displayed to the user
+
+    - Handling Exceptions - 
+        - try/catch block - catch more specific exceptions followed by more general
+
+            try
+            {
+                //try block
+            }
+            catch (FileNotFoundException fnfEx)
+            {
+                //catch block one
+            }
+            catch (Exception e)
+            {
+                //catch block n
+            }
+        - finally - handles critical code which must run
+
+            try
+            {
+
+            }
+            catch (NullReferenceException ex)
+            {
+                // catch all mu,, reference exceptions
+            }
+            catch (Exception ex)
+            {
+                // catch all other exceptions
+            }
+            finally
+            {
+                // Code which always runs to close files or resources
+            }
+
+    - Throwing Exceptions - when an exception ia thrown the current block of code terminates
+
+        var ex = new NullReferenceException("The 'Name' parameter is null.");
+        throw ex;
+
+        *** Common strategy - method or block of code catches and attempts to handle exceptions - If catch black cannot handle exception it can rethrow exception to propagate to calling code
+
+            try
+            {
+                // code that could cause exception
+            }
+            catch (NullReferenceException ex)
+            {
+                // catch all NullReferenceException 
+            }
+            catch (Exception ex)
+            {
+                //Attempt to handle exception
+                //If this catch cabbot resolve exception,
+                //throw it to the calling code
+                throw;
+            }
